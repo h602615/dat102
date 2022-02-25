@@ -1,4 +1,4 @@
-package no.hvl.dat102.kjedet;
+ package no.hvl.dat102.kjedet;
 
 import no.hvl.dat102.adt.OrdnetListeADT;
 import no.hvl.dat102.exceptions.EmptyCollectionException;
@@ -11,9 +11,7 @@ public class KjedetOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 	private int antall;
 	private LinearNode<T> foerste, siste;
 
-	/**
-	 * Lager en ny tom liste.
-	 */
+	
 	public KjedetOrdnetListe() {
 		antall = 0;
 		foerste = null;
@@ -25,9 +23,8 @@ public class KjedetOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 		if (erTom())
 			throw new EmptyCollectionException("ordnet liste");
 
-		T resultat = null;
-		// ...Fyll ut
-		return resultat;
+		
+		return fjern(foerste());
 	}
 
 	@Override
@@ -35,9 +32,9 @@ public class KjedetOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 		if (erTom())
 			throw new EmptyCollectionException("ordnet liste");
 
-		T resultat = null;
-		// ...Fyll ut
-		return resultat;
+		
+		
+		return fjern(siste());
 	}
 
 	@Override
@@ -72,8 +69,24 @@ public class KjedetOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 
 	@Override
 	public void leggTil(T element) {
-
-		// ...Fyll ut
+		LinearNode<T> nynode = new LinearNode<>(element);
+		LinearNode<T> aktuell = foerste;
+		LinearNode<T> forrige = null;
+		while (aktuell != null && (aktuell.getElement().compareTo(element) != 0
+				|| aktuell.getElement().compareTo(element) != -1)) {
+			forrige = aktuell;
+			aktuell = aktuell.getNeste();
+		}
+		if (forrige == null) {
+			nynode.setNeste(foerste != null ? foerste.getNeste() : null);
+			foerste = nynode;
+			antall++;
+		} else {
+			nynode.setNeste(forrige.getNeste());
+			forrige.setNeste(nynode);
+			antall++;
+			//forrige.getNeste() = nynode;
+		}
 	}
 
 	@Override

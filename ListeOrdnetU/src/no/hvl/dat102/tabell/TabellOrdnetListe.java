@@ -24,8 +24,9 @@ public class TabellOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 		if (erTom())
 			throw new EmptyCollectionException("ordnet liste");
 
-		T resultat = null;
-		// ... Fyll ut
+		T resultat = siste();
+		bak--;
+		liste[bak] = null;
 		return resultat;
 	}
 
@@ -34,8 +35,14 @@ public class TabellOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 		if (erTom())
 			throw new EmptyCollectionException("ordnet liste");
 
-		T resultat = null;
-		// ... Fyll ut
+		T resultat = foerste();
+
+		for (int i = 0; i < bak; i++) {
+			liste[i] = liste[i + 1];
+		}
+		liste[bak] = null;
+		bak--;
+
 		return resultat;
 	}
 
@@ -52,11 +59,10 @@ public class TabellOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 	public T siste() {
 		if (erTom())
 			throw new EmptyCollectionException("ordnet liste");
-		
-		T resultat = null;
-		// ...Fyll ut
 
-		return resultat;
+		T resultat = null;
+
+		return resultat = liste[bak - 1];
 	}
 
 	@Override
@@ -72,7 +78,20 @@ public class TabellOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 	@Override
 	public void leggTil(T element) {
 
-		// ...Fyll ut
+		if (bak == liste.length) {
+			utvid();
+		}
+
+		int i = 0;
+		while (i < antall() && element.compareTo(liste[i]) > 0) {
+			i++;
+		}
+		for (int k = bak + 1; k > i; k--) {
+			liste[k] = liste[k - 1];
+		}
+		liste[i] = element;
+		bak++;
+
 	}
 
 	@Override
@@ -82,15 +101,29 @@ public class TabellOrdnetListe<T extends Comparable<T>> implements OrdnetListeAD
 
 	@Override
 	public T fjern(T element) {
-		// ...Fyll ut
-		return element;
+		int i = finn(element);
 
+		if (i <0) {
+			for (int k = i; k < bak - 1; k++) {
+				liste[k] = liste[k + 1];
+			}
+			bak--;
+			liste[bak] = null;
+			return element;
+		}
+		return null;
 	}
 
 	private int finn(T el) {
-		int i = 0, resultat = IKKE_FUNNET;
-		// ...Fyll ut
-		return resultat;
+		if (erTom()) {
+			throw new EmptyCollectionException("Ordnet liste");
+		}
+		for (int i = 0; i < bak; i++) {
+			if (liste[i].equals(el)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public String toString() {
